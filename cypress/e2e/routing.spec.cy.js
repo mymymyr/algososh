@@ -1,15 +1,19 @@
+import { FIBONACCI_PAGE, LIST_PAGE, QUEUE_PAGE, RECURSION_PAGE, SORTING_PAGE, STACK_PAGE } from '../constants/constants';
+
 describe('Переход по страницам', function () {
     beforeEach(function () {
-        cy.visit('http://localhost:3000');
+        cy.visit('/');
     });
 
+    const hrefPathSelector = (url) => `a[href="${url}"]`
+
     const checkMainLinks = () => {
-        cy.get('a[href="/recursion"]').should('be.visible');
-        cy.get('a[href="/fibonacci"]').should('be.visible');
-        cy.get('a[href="/sorting"]').should('be.visible');
-        cy.get('a[href="/stack"]').should('be.visible');
-        cy.get('a[href="/queue"]').should('be.visible');
-        cy.get('a[href="/list"]').should('be.visible');
+        cy.get(hrefPathSelector(RECURSION_PAGE)).should('be.visible');
+        cy.get(hrefPathSelector(FIBONACCI_PAGE)).should('be.visible');
+        cy.get(hrefPathSelector(SORTING_PAGE)).should('be.visible');
+        cy.get(hrefPathSelector(STACK_PAGE)).should('be.visible');
+        cy.get(hrefPathSelector(QUEUE_PAGE)).should('be.visible');
+        cy.get(hrefPathSelector(LIST_PAGE)).should('be.visible');
     }
 
     it('Проверит доступность главной страницы', function () {
@@ -17,43 +21,43 @@ describe('Переход по страницам', function () {
     });
 
     it('Проверит доступность страницы со строкой', function () {
-        cy.get('a[href="/recursion"]').click();
+        cy.get(hrefPathSelector(RECURSION_PAGE)).click();
         cy.contains('Строка');
         cy.contains('К оглавлению');
     });
 
     it('Проверит доступность страницы с последовательностью Фибоначчи', function () {
-        cy.get('a[href="/fibonacci"]').click();
+        cy.get(hrefPathSelector(FIBONACCI_PAGE)).click();
         cy.contains('Последовательность Фибоначчи');
         cy.contains('К оглавлению');
     });
 
     it('Проверит доступность страницы с сортировкой массива', function () {
-        cy.get('a[href="/sorting"]').click();
+        cy.get(hrefPathSelector(SORTING_PAGE)).click();
         cy.contains('Сортировка массива');
         cy.contains('К оглавлению');
     });
 
     it('Проверит доступность страницы со стеком', function () {
-        cy.get('a[href="/stack"]').click();
+        cy.get(hrefPathSelector(STACK_PAGE)).click();
         cy.contains('Стек');
         cy.contains('К оглавлению');
     });
 
     it('Проверит доступность страницы с очередью', function () {
-        cy.get('a[href="/queue"]').click();
+        cy.get(hrefPathSelector(QUEUE_PAGE)).click();
         cy.contains('Очередь');
         cy.contains('К оглавлению');
     });
 
     it('Проверит доступность страницы со связным списком', function () {
-        cy.get('a[href="/list"]').click();
+        cy.get(hrefPathSelector(LIST_PAGE)).click();
         cy.contains('Связный список');
         cy.contains('К оглавлению');
     });
 
     it('Проверит возврат к главной странице', function () {
-        cy.get('a[href="/recursion"]').click();
+        cy.get(hrefPathSelector(RECURSION_PAGE)).click();
         cy.contains('К оглавлению').click();
         checkMainLinks();
     });

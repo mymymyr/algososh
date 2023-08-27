@@ -1,14 +1,15 @@
 import { SHORT_DELAY_IN_MS } from "../../src/constants/delays";
+import { CIRCLE_CHANGING_CLASS, CIRCLE_DEFAULT_CLASS, CIRCLE_TEXT, INPUT_ELEMENT, LOADER_CLASS, STACK_PAGE, TOP } from "../constants/constants";
 
 describe('Стек', () => {
     beforeEach(() => {
-        cy.visit('http://localhost:3000/stack');
+        cy.visit(STACK_PAGE);
     });
 
     it('Если в инпуте пусто, то кнопка добавления недоступна', () => {
         cy.contains('Добавить').as('button');
         cy.get('@button').should('be.disabled');
-        cy.get('input').should('have.value', '');
+        cy.get(INPUT_ELEMENT).should('have.value', '');
     });
 
     it('Добавление элемента в стек', () => {
@@ -17,9 +18,9 @@ describe('Стек', () => {
         const checkResNumber = (count, items) => {
             for (let i = 0; i <= count; i++) {
                 cy.get(items[i]).parent().invoke("attr", "class")
-                    .then((className) => expect(className).contains(count === i ? 'circle_changing' : 'circle_default'));
+                    .then((className) => expect(className).contains(count === i ? CIRCLE_CHANGING_CLASS : CIRCLE_DEFAULT_CLASS));
 
-                cy.get(items[i]).parent().parent().should(i === count ? 'contains.text' : 'not.contains.text', 'top');
+                cy.get(items[i]).parent().parent().should(i === count ? 'contains.text' : 'not.contains.text', TOP);
 
                 cy.get(items[i]).should('have.text', resNumbers[i]);
             }
@@ -30,14 +31,14 @@ describe('Стек', () => {
         cy.get('@button').should('be.disabled');
 
         for (let i = 0; i < resNumbers.length; i++) {
-            cy.get('input').type(resNumbers[i]);
-            cy.get('input').should('have.value', resNumbers[i]);
+            cy.get(INPUT_ELEMENT).type(resNumbers[i]);
+            cy.get(INPUT_ELEMENT).should('have.value', resNumbers[i]);
             cy.get('@button').should('be.enabled');
             cy.get('@button').click();
             cy.get('@button')
                 .invoke("attr", "class")
-                .then((className) => expect(className).contains('loader'));
-            cy.get('[class^="text text_type_circle"]').then((items) => {
+                .then((className) => expect(className).contains(LOADER_CLASS));
+            cy.get(CIRCLE_TEXT).then((items) => {
                 checkResNumber(i, items);
             });
             cy.wait(SHORT_DELAY_IN_MS);
@@ -52,13 +53,13 @@ describe('Стек', () => {
         cy.get('@removeButton').should('be.disabled');
 
         cy.get('@button').should('be.disabled');
-        cy.get('input').type(4);
+        cy.get(INPUT_ELEMENT).type(4);
         cy.get('@button').should('be.enabled');
         cy.get('@button').click();
         cy.wait(SHORT_DELAY_IN_MS);
         cy.get('@removeButton').should('be.enabled');
         cy.get('@button').should('be.disabled');
-        cy.get('input').type(3);
+        cy.get(INPUT_ELEMENT).type(3);
         cy.get('@button').should('be.enabled');
         cy.get('@button').click();
         cy.wait(SHORT_DELAY_IN_MS);
@@ -68,23 +69,23 @@ describe('Стек', () => {
 
         cy.get('@removeButton')
             .invoke("attr", "class")
-            .then((className) => expect(className).contains('loader'));
+            .then((className) => expect(className).contains(LOADER_CLASS));
 
-        cy.get('[class^="text text_type_circle"]').then((items) => {
+        cy.get(CIRCLE_TEXT).then((items) => {
             cy.get(items[0]).should('have.text', '4');
             cy.get(items[0]).parent().invoke("attr", "class")
-                .then((className) => expect(className).contains('circle_default'));
+                .then((className) => expect(className).contains(CIRCLE_DEFAULT_CLASS));
             cy.get(items[1]).should('have.text', '3');
             cy.get(items[1]).parent().invoke("attr", "class")
-                .then((className) => expect(className).contains('circle_changing'));
+                .then((className) => expect(className).contains(CIRCLE_CHANGING_CLASS));
 
         });
 
         cy.wait(SHORT_DELAY_IN_MS);
-        cy.get('[class^="text text_type_circle"]').then((items) => {
+        cy.get(CIRCLE_TEXT).then((items) => {
             cy.get(items[0]).should('have.text', '4');
             cy.get(items[0]).parent().invoke("attr", "class")
-                .then((className) => expect(className).contains('circle_default'));
+                .then((className) => expect(className).contains(CIRCLE_DEFAULT_CLASS));
             expect(items.length).to.equal(1);
         });
     });
@@ -96,13 +97,13 @@ describe('Стек', () => {
         cy.get('@clearButton').should('have.text', 'Очистить');
 
         cy.get('@button').should('be.disabled');
-        cy.get('input').type(4);
+        cy.get(INPUT_ELEMENT).type(4);
         cy.get('@button').should('be.enabled');
         cy.get('@button').click();
         cy.wait(SHORT_DELAY_IN_MS);
         cy.get('@clearButton').should('be.enabled');
         cy.get('@button').should('be.disabled');
-        cy.get('input').type(3);
+        cy.get(INPUT_ELEMENT).type(3);
         cy.get('@button').should('be.enabled');
         cy.get('@button').click();
         cy.wait(SHORT_DELAY_IN_MS);
@@ -110,6 +111,6 @@ describe('Стек', () => {
 
         cy.get('@clearButton').click();
 
-        cy.get('[class^="text text_type_circle"]').should('not.exist');
+        cy.get(CIRCLE_TEXT).should('not.exist');
     });
 })

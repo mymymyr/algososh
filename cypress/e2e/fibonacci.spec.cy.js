@@ -1,15 +1,16 @@
 import { SHORT_DELAY_IN_MS } from "../../src/constants/delays";
+import { CIRCLE_TEXT, FIBONACCI_PAGE, INPUT_ELEMENT, LOADER_CLASS } from '../constants/constants';
 
 describe('Фибоначчи', () => {
     beforeEach(() => {
-        cy.visit('http://localhost:3000/fibonacci');
+        cy.visit(FIBONACCI_PAGE);
     });
 
     it('Если в инпуте пусто, то кнопка добавления недоступна', () => {
         cy.get('button').last().as('button');
         cy.get('@button').contains('Рассчитать');
         cy.get('@button').should('be.disabled');
-        cy.get('input').should('have.value', '');
+        cy.get(INPUT_ELEMENT).should('have.value', '');
     });
 
     it('Числа генерируются корректно', () => {
@@ -22,17 +23,17 @@ describe('Фибоначчи', () => {
             }
         }
 
-        cy.get('input').type(testNumber);
-        cy.get('input').should('have.value', testNumber);
+        cy.get(INPUT_ELEMENT).type(testNumber);
+        cy.get(INPUT_ELEMENT).should('have.value', testNumber);
         cy.get('button').last().as('button');
         cy.get('@button').should('be.enabled');
         cy.get('@button').click();
         cy.get('@button')
             .invoke("attr", "class")
-            .then((className) => expect(className).contains('loader'));
+            .then((className) => expect(className).contains(LOADER_CLASS));
 
         for (let i = 0; i < resNumbers.length; i++) {
-            cy.get('[class^="text text_type_circle"]').then((items) => {
+            cy.get(CIRCLE_TEXT).then((items) => {
                 checkResNumber(i, items);
             });
             cy.wait(SHORT_DELAY_IN_MS);
